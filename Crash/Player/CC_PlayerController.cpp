@@ -25,6 +25,8 @@ void ACC_PlayerController::SetupInputComponent()
 			EnhancedInputComponent->BindAction(JumpAction,ETriggerEvent::Completed,this,&ACC_PlayerController::StopJumping);
 			EnhancedInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&ACC_PlayerController::Move);
 			EnhancedInputComponent->BindAction(LookAction,ETriggerEvent::Triggered,this,&ACC_PlayerController::Look);
+			
+			EnhancedInputComponent->BindAction(PrimaryAction,ETriggerEvent::Started,this,&ACC_PlayerController::Primary);
 		}
 	}
 }
@@ -67,4 +69,9 @@ void ACC_PlayerController::Look(const FInputActionValue& Value)
 	const FVector2D LookAxisVector = Value.Get<FVector2D>();
 	AddYawInput(LookAxisVector.X);
 	AddPitchInput(LookAxisVector.Y);
+}
+
+void ACC_PlayerController::Primary()
+{
+	UE_LOG(LogTemp,Warning,TEXT("Primary"));
 }
