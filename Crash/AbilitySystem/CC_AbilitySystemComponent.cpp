@@ -3,34 +3,37 @@
 
 #include "CC_AbilitySystemComponent.h"
 
+#include "Crash/GameplayTags/CCTags.h"
 
-// Sets default values for this component's properties
-UCC_AbilitySystemComponent::UCC_AbilitySystemComponent()
+
+void UCC_AbilitySystemComponent::OnGiveAbility(FGameplayAbilitySpec& AbilitySpec)
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-
-// Called when the game starts
-void UCC_AbilitySystemComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
+	Super::OnGiveAbility(AbilitySpec);
 	
+	HandleAutoActivatedAbility(AbilitySpec);
 }
 
-
-// Called every frame
-void UCC_AbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType,
-                                               FActorComponentTickFunction* ThisTickFunction)
+void UCC_AbilitySystemComponent::OnRep_ActivateAbilities()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	Super::OnRep_ActivateAbilities();
+	
+	FScopedAbilityListLock ActiveScopeLock(*this);
+	for (const FGameplayAbilitySpec& AbilitySpec: GetActivatableAbilities())
+	{
+		HandleAutoActivatedAbility(AbilitySpec);
+	}
 }
 
+void UCC_AbilitySystemComponent::HandleAutoActivatedAbility(const FGameplayAbilitySpec& AbilitySpec)
+{
+	if (!IsValid(AbilitySpec.Ability)) return;
+	
+	for (const FGameplayTag& Tag: AbilitySpec.Ability->GetAssetTags())
+	{
+		if (Tag.MatchesTagExact(CCTags::CCAbilities::ActivateOnGiven))
+		{
+			TryActivateAbility(AbilitySpec.Handle);
+			return;
+		}
+	}
+}
