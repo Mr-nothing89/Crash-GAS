@@ -5,3 +5,5 @@ UE_DEFINE_GAMEPLAY_TAG_COMMENT(CCTags::CCAbilities::Secondary,"CCTags.CCAbilitie
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(CCTags::CCAbilities::Tertiary,"CCTags.CCAbilities.Tertiary","Tag for the tertiary ability");
 UE_DEFINE_GAMEPLAY_TAG_COMMENT(CCTags::CCAbilities::ActivateOnGiven,"CCTags.CCAbilities.ActivateOnGiven",
 	"Tag for abilities that should be activate immediately when given");
+
+UE_DEFINE_GAMEPLAY_TAG_COMMENT(CCTags::Events::Enemy::HitReact,"CCTags.Events.Enemy.HitReact","Tag for enemy hit reaction events");
