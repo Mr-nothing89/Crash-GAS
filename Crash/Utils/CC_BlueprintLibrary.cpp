@@ -6,11 +6,13 @@
 EHitDirection UCC_BlueprintLibrary::GetHitDirection(const FVector& TargetForward, const FVector& ToInstigator)
 {
 	const float Dot = FVector::DotProduct(TargetForward,ToInstigator);
-	if (Dot < -0.5f)
+	const float Angle = FMath::RadiansToDegrees(FMath::Acos(Dot));
+	UE_LOG(LogTemp,Warning,TEXT("Angle: %f"),Angle);
+	if (Angle >= 120.f)
 	{
 		return EHitDirection::Back;
 	}
-	if (Dot < 0.5f)
+	if (Angle < 120.f && Angle > 60.f)
 	{
 		const FVector Cross = FVector::CrossProduct(TargetForward,ToInstigator);
 		if (Cross.Z < 0.f)
