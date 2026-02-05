@@ -24,12 +24,18 @@ UAbilitySystemComponent* ACC_EnemyCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+UAttributeSet* ACC_EnemyCharacter::GetAttributeSet() const
+{
+	return AttributeSet;
+}
+
 
 void ACC_EnemyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	if (!IsValid(AbilitySystemComponent)) return;
 	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	OnASCInitialized.Broadcast(AbilitySystemComponent,AttributeSet);
 	
 	if (!HasAuthority()) return;
 	

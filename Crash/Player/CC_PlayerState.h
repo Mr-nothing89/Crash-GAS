@@ -23,6 +23,7 @@ public:
 	ACC_PlayerState();
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	FORCEINLINE UAttributeSet* GetAttributeSet() const { return AttributeSet;}
 	
 private:
 	
