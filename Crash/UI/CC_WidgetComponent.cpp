@@ -17,7 +17,10 @@ void UCC_WidgetComponent::BeginPlay()
 	if (!IsASCInitialized())
 	{
 		CrashCharacter->OnASCInitialized.AddDynamic(this,&UCC_WidgetComponent::OnASCInitialized);
+		return;
 	}
+	
+	InitializeAttributeDelegate();
 	
 }
 
@@ -33,12 +36,30 @@ bool UCC_WidgetComponent::IsASCInitialized() const
 	return AbilitySystemComponent.IsValid() && AttributeSet.IsValid();
 }
 
+void UCC_WidgetComponent::InitializeAttributeDelegate()
+{
+	if (!AttributeSet->bAttributesInitialized)
+	{
+		AttributeSet->OnAttributesInitialized.AddDynamic(this,&UCC_WidgetComponent::BindToAttributeChanges);
+	}
+	else
+	{
+		BindToAttributeChanges();
+	}
+}
+
 void UCC_WidgetComponent::OnASCInitialized(UAbilitySystemComponent* ASC,UAttributeSet* AS)
 {
 	AbilitySystemComponent = Cast<UCC_AbilitySystemComponent>(ASC);
 	AttributeSet = Cast<UCC_AttributeSet>(AS);
 	
-	//TODO: check if the AttributeSet has been Initialized with the first GE
-	//If not, bind to some delegate that will be broadcast when it is initialized.
+	if (!IsASCInitialized()) return;
+	InitializeAttributeDelegate();
+	
+}
+
+void UCC_WidgetComponent::BindToAttributeChanges()
+{
+	//TODO: Listen for changes to GameplayAttributes and update our widgets Accordingly.
 }
 
